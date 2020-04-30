@@ -6,9 +6,11 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import com.jjoe64.graphview.DefaultLabelFormatter
@@ -28,7 +30,12 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
     private lateinit var mSensorManager: SensorManager
     private lateinit var mSensor: Sensor
+    //private lateinit var view: View
     //private lateinit var mSensorG: Sensor
+
+    private var mediaPlayer: MediaPlayer? = null
+
+
 
     private lateinit var shake: TextView
 
@@ -37,12 +44,18 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     private var accelerationThreshold = 2.7F
     private val SHAKE_SLOP_TIME_MS = 500
     private var shaketime = 0L
+    private var isColor = false
+    private var work = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        //view.setBackgroundColor(Color.CYAN)
+
+
 
         shake = findViewById(R.id.shake)
+
         shaketime = System.currentTimeMillis();
         mSensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
 
@@ -100,14 +113,38 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             if (now - shaketime < 200) {
                 return
             }
-            shake.text = "shaked!!!"
-            shake.setTextColor (Color.parseColor("#0000ff"))
+//            shake.text = "shaked!!!"
+//            shake.setTextColor (Color.parseColor("#0000ff"))
             //Toast.makeText(applicationContext, "shake", Toast.LENGTH_SHORT)
             shaketime = now
 
 
+            work = true
+            if (!isColor) {
+                shake.text = "shaked111"
+                shake.setTextColor (Color.parseColor("#0000ff"))
+                mediaPlayer = MediaPlayer.create(this, R.raw.ring)
+                mediaPlayer?.start()
 
+            } else {
+                shake.text = "shaked222"
+                shake.setTextColor (Color.parseColor("#0000ff"))
+                //mediaPlayer = MediaPlayer.create(this, R.raw.ring)
+                mediaPlayer?.pause()
+                mediaPlayer?.stop()
+                mediaPlayer?.release()
+
+            }
+            isColor = !isColor
         }
+
+        //detect pull-UP
+//        if (work) {
+//            if (event.values[0] <= 3.0f) {
+//
+//            }
+
+
 
 
 
