@@ -7,40 +7,54 @@
     android:padding="8dp"
     tools:context=".FixRepetition">
 
+
     <TextView
-        android:id="@+id/shake"
+        android:id="@+id/begin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="173dp"
-        android:text="shake"
+        android:layout_marginBottom="636dp"
+        android:text="Please shake and then start"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/shake2" />
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/shake2"
+        android:id="@+id/times"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="display how many times you do"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/stop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.493"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editText"
+        app:layout_constraintVertical_bias="0.482" />
+
+    <TextView
+        android:id="@+id/inputtimes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="begin2"
+        android:text="input repet"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.517"
+        app:layout_constraintHorizontal_bias="0.485"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.398" />
-
+        app:layout_constraintVertical_bias="0.15" />
 
     <Button
         android:id="@+id/stop"
         android:layout_width="200dp"
         android:layout_height="80dp"
-        android:layout_marginBottom="224dp"
-        android:text="@android:string/untitled"
+        android:layout_marginBottom="132dp"
+        android:text="Stop"
         android:textSize="20sp"
+        android:onClick="stop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
@@ -50,12 +64,13 @@
         android:id="@+id/editText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
         android:ems="10"
         android:inputType="numberSigned"
-        app:layout_constraintBottom_toTopOf="@+id/shake2"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.464"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/inputtimes" />
 
     <!--    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
     <!--        xmlns:tools="http://schemas.android.com/tools"-->

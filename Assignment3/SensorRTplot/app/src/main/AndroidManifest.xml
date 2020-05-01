@@ -24,6 +24,13 @@
                 android:value=".MainActivity">
             </meta-data>
         </activity>
+        <activity android:name=".FreeMode"
+            android:configChanges="orientation|screenSize">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity">
+            </meta-data>
+        </activity>
 
 
     </application>

@@ -23,25 +23,25 @@ class MainActivity : AppCompatActivity() {
         easyMode = findViewById(R.id.fixrep)
         easyMode.text = "fix"
         mediumMode = findViewById(R.id.computer)
-        mediumMode.text = "Vs Computer"
+        mediumMode.text = "free mode"
 
         category = findViewById(R.id.category)
-        category.text = "Play with ?"
+        category.text = "mode selection"
     }
 
     //send mode to next page, "extra"
     fun playwithfix (view: View) {
         val intent = Intent (this, FixRepetition::class.java).apply {
-            putExtra(MODE, "Human")
+            putExtra(MODE, "fix")
         }
         startActivity(intent)
     }
 
-//    fun playWithComputer (view: View) {
-//        val intent = Intent (this, FixRepetition::class.java).apply {
-//            putExtra(MODE, "Computer")
-//        }
-//        startActivity(intent)
-//    }
+    fun playWithFree (view: View) {
+        val intent = Intent (this, FreeMode::class.java).apply {
+            putExtra(MODE, "free")
+        }
+        startActivity(intent)
+    }
 
 }

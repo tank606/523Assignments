@@ -1,6 +1,7 @@
 package edu.uw.eep523.sensorrtplot
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.hardware.Sensor
 import android.hardware.SensorEvent
@@ -14,13 +15,9 @@ import android.view.View
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import com.jjoe64.graphview.DefaultLabelFormatter
-import com.jjoe64.graphview.GraphView
 import com.jjoe64.graphview.series.DataPoint
 import com.jjoe64.graphview.series.LineGraphSeries
-import kotlinx.android.synthetic.main.activity_main.*
-import java.text.NumberFormat
-import java.util.concurrent.atomic.AtomicStampedReference
+import kotlinx.android.synthetic.main.activity_fixrep.*
 
 
 class FixRepetition : AppCompatActivity(), SensorEventListener {
@@ -33,6 +30,7 @@ class FixRepetition : AppCompatActivity(), SensorEventListener {
     private lateinit var mSensor: Sensor
     private lateinit var et: EditText
 
+
     //private lateinit var view: View
     //private lateinit var mSensorG: Sensor
 
@@ -40,17 +38,18 @@ class FixRepetition : AppCompatActivity(), SensorEventListener {
 
 
 
-    private lateinit var shake: TextView
+    private lateinit var times: TextView
+    private lateinit var begin: TextView
 
     val linear_acceleration: Array<Float> = arrayOf(0.0f,0.0f,0.0f)
 
-    private var accelerationThreshold = 2.7F
+    private var accelerationThreshold = 27F
     private val SHAKE_SLOP_TIME_MS = 500
     private var shaketime = 0L
     private var isColor = false
     private var work = false
     private var pullup = 0
-    private var target = 5
+    //private var target = 5
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,10 +57,12 @@ class FixRepetition : AppCompatActivity(), SensorEventListener {
         //view.setBackgroundColor(Color.CYAN)
 
 
-        shake = findViewById(R.id.shake)
-        et = findViewById(R.id.editText);
+        times = findViewById(R.id.times)
+        et = findViewById(R.id.editText)
+        begin = findViewById(R.id.begin)
 
-        shaketime = System.currentTimeMillis();
+
+        shaketime = System.currentTimeMillis()
         mSensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
 
 
@@ -107,14 +108,15 @@ class FixRepetition : AppCompatActivity(), SensorEventListener {
              * of the acceleration. As an added benefit, we use less power and
              * CPU resources.
        */
-        val ax = event.values[0] / SensorManager.GRAVITY_EARTH
-        val ay = event.values[1] / SensorManager.GRAVITY_EARTH
-        val az = event.values[2] / SensorManager.GRAVITY_EARTH
+        val ax = event.values[0]
+        val ay = event.values[1]
+        val az = event.values[2]
 
-        val magnitudeSquared = (ax  * ax + ay * ay + az * az).toDouble()
+
+        val magnitudeSquared = (ax * ax + ay * ay + az * az).toDouble()
 
         if (magnitudeSquared > accelerationThreshold * accelerationThreshold) {
-            val now = System.currentTimeMillis();
+            val now = System.currentTimeMillis()
             if (now - shaketime < 200) {
                 return
             }
@@ -125,9 +127,44 @@ class FixRepetition : AppCompatActivity(), SensorEventListener {
 
 
             work = true
-            shake.text = et.getText().toString()
-            shake.setTextColor(Color.parseColor("#0000ff"))
-        }
+            Toast.makeText(applicationContext, "shaked", Toast.LENGTH_SHORT).show()
+        } else if (work) {
+                if (event.values[1] >= 13f) {
+                    val now = System.currentTimeMillis()
+                    if (now - shaketime < 200) {
+                        return
+                    }
+                    shaketime = now
+
+                    if (et.text.toString() == "") {
+                        Toast.makeText(applicationContext, "Please input times", Toast.LENGTH_SHORT).show()
+                        return
+                    }
+                    //begin.text = "Target:"+et.getText()
+//                    val bg = "Target:"+et.getText()
+//                    begin.text = bg
+//                    begin.setTextColor(Color.parseColor("#0000ff"))
+
+                    pullup++
+                    val temp = "pull-up numbers:$pullup"
+                    times.text = temp
+                    //times.text = "pull-up numbers:"+pullup.toString()
+                    times.setTextColor(Color.parseColor("#0000ff"))
+
+
+                    var target = et.text.toString().toInt()
+                    if (pullup == target) {
+                        mediaPlayer = MediaPlayer.create(this, R.raw.ring)
+                        mediaPlayer?.start()
+                        times.text = "get it"
+                        times.setTextColor(Color.parseColor("#0000ff"))
+                        work = false
+
+                    }
+                }
+            }
+    }
+
 //            if (!isColor) {
 //                shake.text = "shaked111"
 //                shake.setTextColor (Color.parseColor("#0000ff"))
@@ -146,29 +183,9 @@ class FixRepetition : AppCompatActivity(), SensorEventListener {
 //            isColor = !isColor
 //
 
-            //detect pull-UP
-            if (work) {
-                if (event.values[1] >= 17f) {
-                    val now = System.currentTimeMillis();
-                    if (now - shaketime < 300) {
-                        return
-                    }
-                    shaketime = now
-                    pullup++
-                    shake.text = pullup.toString()
-                    shake.setTextColor(Color.parseColor("#0000ff"))
-                    if (pullup == target) {
-                        mediaPlayer = MediaPlayer.create(this, R.raw.ring)
-                        mediaPlayer?.start()
-                        shake.text = "get it"
-                        shake.setTextColor(Color.parseColor("#0000ff"))
-                        work = false
 
-                    }
-                }
-            }
 
-        }
+
 
 
 
@@ -250,12 +267,20 @@ class FixRepetition : AppCompatActivity(), SensorEventListener {
 
     override fun onPause() {
         super.onPause()
+        //mediaPlayer?.stop()
         Log.d("tag","onPause")
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
         mSensorManager.unregisterListener(this)
+    }
+
+    fun stop (view: View) {
+        work = false
+        Toast.makeText(applicationContext, "stopped", Toast.LENGTH_SHORT).show()
     }
 
 
