@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import com.jjoe64.graphview.DefaultLabelFormatter
@@ -30,6 +31,8 @@ class FixRepetition : AppCompatActivity(), SensorEventListener {
 
     private lateinit var mSensorManager: SensorManager
     private lateinit var mSensor: Sensor
+    private lateinit var et: EditText
+
     //private lateinit var view: View
     //private lateinit var mSensorG: Sensor
 
@@ -46,6 +49,8 @@ class FixRepetition : AppCompatActivity(), SensorEventListener {
     private var shaketime = 0L
     private var isColor = false
     private var work = false
+    private var pullup = 0
+    private var target = 5
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,8 +58,8 @@ class FixRepetition : AppCompatActivity(), SensorEventListener {
         //view.setBackgroundColor(Color.CYAN)
 
 
-
         shake = findViewById(R.id.shake)
+        et = findViewById(R.id.editText);
 
         shaketime = System.currentTimeMillis();
         mSensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
@@ -120,29 +125,50 @@ class FixRepetition : AppCompatActivity(), SensorEventListener {
 
 
             work = true
-            if (!isColor) {
-                shake.text = "shaked111"
-                shake.setTextColor (Color.parseColor("#0000ff"))
-                mediaPlayer = MediaPlayer.create(this, R.raw.ring)
-                mediaPlayer?.start()
-
-            } else {
-                shake.text = "shaked222"
-                shake.setTextColor (Color.parseColor("#0000ff"))
-                //mediaPlayer = MediaPlayer.create(this, R.raw.ring)
-                mediaPlayer?.pause()
-                mediaPlayer?.stop()
-                mediaPlayer?.release()
-
-            }
-            isColor = !isColor
+            shake.text = et.getText().toString()
+            shake.setTextColor(Color.parseColor("#0000ff"))
         }
-
-        //detect pull-UP
-//        if (work) {
-//            if (event.values[0] <= 3.0f) {
+//            if (!isColor) {
+//                shake.text = "shaked111"
+//                shake.setTextColor (Color.parseColor("#0000ff"))
+//                mediaPlayer = MediaPlayer.create(this, R.raw.ring)
+//                mediaPlayer?.start()
+//
+//            } else {
+//                shake.text = "shaked222"
+//                shake.setTextColor (Color.parseColor("#0000ff"))
+//                //mediaPlayer = MediaPlayer.create(this, R.raw.ring)
+//                mediaPlayer?.pause()
+//                mediaPlayer?.stop()
+//                mediaPlayer?.release()
 //
 //            }
+//            isColor = !isColor
+//
+
+            //detect pull-UP
+            if (work) {
+                if (event.values[1] >= 17f) {
+                    val now = System.currentTimeMillis();
+                    if (now - shaketime < 300) {
+                        return
+                    }
+                    shaketime = now
+                    pullup++
+                    shake.text = pullup.toString()
+                    shake.setTextColor(Color.parseColor("#0000ff"))
+                    if (pullup == target) {
+                        mediaPlayer = MediaPlayer.create(this, R.raw.ring)
+                        mediaPlayer?.start()
+                        shake.text = "get it"
+                        shake.setTextColor(Color.parseColor("#0000ff"))
+                        work = false
+
+                    }
+                }
+            }
+
+        }
 
 
 
@@ -162,7 +188,7 @@ class FixRepetition : AppCompatActivity(), SensorEventListener {
 //        mSeriesYaccel!!.appendData(DataPoint(xval, linear_acceleration[1].toDouble()), true, 50)
 //        mSeriesZaccel!!.appendData(DataPoint(xval, linear_acceleration[2].toDouble()), true, 50)
 
-    }
+
 
     // return true if the device is currently accelerating
 //    private fun isAccelerating(event: SensorEvent): Boolean {
