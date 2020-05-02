@@ -11,8 +11,8 @@ const val MODE = "NULL"
 
 class MainActivity : AppCompatActivity() {
 
-    lateinit var easyMode: Button
-    lateinit var mediumMode: Button
+    lateinit var fixmode: Button
+    lateinit var freemode: Button
     lateinit var category: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,13 +20,13 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
 
-        easyMode = findViewById(R.id.fixrep)
-        easyMode.text = "fix"
-        mediumMode = findViewById(R.id.computer)
-        mediumMode.text = "free mode"
+        fixmode = findViewById(R.id.fixrep)
+        fixmode.text = "define repetitions"
+        freemode = findViewById(R.id.freemode)
+        freemode.text = "free mode"
 
         category = findViewById(R.id.category)
-        category.text = "mode selection"
+        category.text = "Mode Selection"
     }
 
     //send mode to next page, "extra"

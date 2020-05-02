@@ -112,16 +112,16 @@ class FreeMode : AppCompatActivity(), SensorEventListener {
                 //begin.text = et.getText()
                 //begin.setTextColor(Color.parseColor("#0000ff"))
                 Toast.makeText(applicationContext, "shaked", Toast.LENGTH_SHORT).show()
-            } else
-                if (work) {
-                    if (event.values[1] >= 13f) {
-                    val now = System.currentTimeMillis();
-                        if (now - shaketime < 200) {
+            } else if (work) {
+                if (event.values[1] >= 13f) {
+                    val now = System.currentTimeMillis()
+                    if (now - shaketime < 800) {
                         return
-                        }
+                    }
                     shaketime = now
                     pullup++
-                    times.text = pullup.toString()
+                    val temp = "pull-up numbers:$pullup"
+                    times.text = temp
                     times.setTextColor(Color.parseColor("#0000ff"))
                 }
             }
@@ -147,6 +147,7 @@ class FreeMode : AppCompatActivity(), SensorEventListener {
 
         fun stop (view: View) {
             work = false;
+            Toast.makeText(applicationContext, "stopped", Toast.LENGTH_SHORT).show()
         }
 
 

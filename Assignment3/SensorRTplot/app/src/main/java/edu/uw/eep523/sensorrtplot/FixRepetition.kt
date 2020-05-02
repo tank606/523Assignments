@@ -22,9 +22,9 @@ import kotlinx.android.synthetic.main.activity_fixrep.*
 
 class FixRepetition : AppCompatActivity(), SensorEventListener {
 
-    private  lateinit var mSeriesXaccel: LineGraphSeries<DataPoint>
-    private lateinit var mSeriesYaccel: LineGraphSeries<DataPoint>
-    private lateinit var mSeriesZaccel: LineGraphSeries<DataPoint>
+//    private  lateinit var mSeriesXaccel: LineGraphSeries<DataPoint>
+//    private lateinit var mSeriesYaccel: LineGraphSeries<DataPoint>
+//    private lateinit var mSeriesZaccel: LineGraphSeries<DataPoint>
 
     private lateinit var mSensorManager: SensorManager
     private lateinit var mSensor: Sensor
@@ -41,7 +41,7 @@ class FixRepetition : AppCompatActivity(), SensorEventListener {
     private lateinit var times: TextView
     private lateinit var begin: TextView
 
-    val linear_acceleration: Array<Float> = arrayOf(0.0f,0.0f,0.0f)
+    //val linear_acceleration: Array<Float> = arrayOf(0.0f,0.0f,0.0f)
 
     private var accelerationThreshold = 27F
     private val SHAKE_SLOP_TIME_MS = 500
@@ -111,6 +111,7 @@ class FixRepetition : AppCompatActivity(), SensorEventListener {
         val ax = event.values[0]
         val ay = event.values[1]
         val az = event.values[2]
+        
 
 
         val magnitudeSquared = (ax * ax + ay * ay + az * az).toDouble()
@@ -120,6 +121,7 @@ class FixRepetition : AppCompatActivity(), SensorEventListener {
             if (now - shaketime < 200) {
                 return
             }
+
 //            shake.text = "shaked!!!"
 //            shake.setTextColor (Color.parseColor("#0000ff"))
             //Toast.makeText(applicationContext, "shake", Toast.LENGTH_SHORT)
@@ -131,7 +133,7 @@ class FixRepetition : AppCompatActivity(), SensorEventListener {
         } else if (work) {
                 if (event.values[1] >= 13f) {
                     val now = System.currentTimeMillis()
-                    if (now - shaketime < 200) {
+                    if (now - shaketime < 500) {
                         return
                     }
                     shaketime = now

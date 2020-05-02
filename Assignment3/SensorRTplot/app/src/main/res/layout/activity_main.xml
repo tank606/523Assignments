@@ -19,7 +19,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/computer"
+        android:id="@+id/freemode"
         android:layout_width="200dp"
         android:layout_height="80dp"
         android:onClick="playWithFree"
