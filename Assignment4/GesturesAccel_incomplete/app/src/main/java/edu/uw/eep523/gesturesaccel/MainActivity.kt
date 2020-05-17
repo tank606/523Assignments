@@ -80,20 +80,17 @@ class MainActivity : AppCompatActivity() , SensorEventListener {
 
         prevTime = now
 
-
         val alpha: Float = 0.8f
 
         gravity[0] = alpha * gravity[0] + (1 - alpha) * event.values[0]
         gravity[1] = alpha * gravity[1] + (1 - alpha) * event.values[1]
         gravity[2] = alpha * gravity[2] + (1 - alpha) * event.values[2]
 
-
         //1. Capture samples for some time and fill an array with the values
         // Remove the gravity contribution with the high-pass filter.
         linear_acceleration[0] = event.values[0] - gravity[0]
         linear_acceleration[1] = event.values[1] - gravity[1]
         linear_acceleration[2] = event.values[2] - gravity[2]
-
 
 //           index++;
 //        if (index >= 127) {
@@ -113,10 +110,7 @@ class MainActivity : AppCompatActivity() , SensorEventListener {
         // % 128
 
        // capturedData.set(Whichposition, WhichValue) // repeat for x, y, z
-
         Log.d(TAG, capturedData.get(nsamples).toString()+"f,"+ capturedData.get(nsamples+1).toString()+"f,"+ capturedData.get(nsamples+2).toString()+"f,...")
-
-
 
         //2. Stop capturing data when we have "enough" samples
       //  if(***condition to stop recording data is satisfied ****){
@@ -128,18 +122,13 @@ class MainActivity : AppCompatActivity() , SensorEventListener {
             mSensorManager.unregisterListener(this)
             //mSensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_NORMAL)
 
+            //3. Call the model to get the predicted result
+            inferenceResult = gestureClassifier.classify(capturedData)
 
+            // Display the prediction result
+            result_view.text = inferenceResult
 
         }
-        //3. Call the model to get the predicted result
-        inferenceResult = gestureClassifier.classify(capturedData)
-
-        // Display the prediction result
-        result_view.text = inferenceResult
-
-      //  }
-
-        
 
     }
 
@@ -148,17 +137,14 @@ class MainActivity : AppCompatActivity() , SensorEventListener {
         //Register the accelerometer listener to start recording data
         // *** to do**** //
         mSensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_NORMAL)
-        //nsamples = 0
-        //capturedData = FloatArray(MAX_SAMPLES*3) { i -> 0f}
-
-
-
-
+        nsamples = 0
     }
 
 
     fun clear_prediction(view:View){
         result_view.text = ""
+        nsamples = 0
+        mSensorManager.unregisterListener(this)
     }
 
     override fun onDestroy() {

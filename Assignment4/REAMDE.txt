@@ -1,0 +1,2 @@
+Kai Tan <tank5@uw.edu>​
+Gesture Recognition App - This app is to detect Wing gesture performed by the smartphone and captured with the accelerometer sensor. You should hold the phone horizontally, parallel to the ground, and perform the wing movement in that position (moving the phone up and down performing the wing). If wing is detected, it is displayed as 0 and its probability is displayed. Otherwise the output is 1. After clicking PREDECT, start recording your gestures. Clear button is used to clear the current display.
