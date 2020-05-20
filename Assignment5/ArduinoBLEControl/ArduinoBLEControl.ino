@@ -33,7 +33,7 @@ String curData = "";
 
 
 //Parameters to detect the board move
-float threshold = 6;
+float threshold = 0.2;
 unsigned long moveInterval = 3000;
 float startAccelMag = 0;
 unsigned long lastMoveTime = 0;
@@ -116,6 +116,7 @@ void moveDetector() {
   float dY = 0;
   float dZ = 0;
 
+
   for (int i = 0; i < 10; ++i) {
     dX = CircuitPlayground.motionX();
     dY = CircuitPlayground.motionY();
@@ -150,6 +151,8 @@ boolean isMove() {
 
   Serial.println("Move detected");
   lastMoveTime = now;
+  startAccelMag = currentAccelMag;
+  
   return true;
 }
 
@@ -248,6 +251,32 @@ void loop(void)
   }
 
 
+  float X = 0;
+  float Y = 0;
+  float Z = 0;
+
+  float dX = 0;
+  float dY = 0;
+  float dZ = 0;
+  float res = 0;
+
+  for (int i = 0; i < 10; ++i) {
+    dX = CircuitPlayground.motionX();
+    dY = CircuitPlayground.motionY();
+    dZ = CircuitPlayground.motionZ();
+
+    X += dX;
+    Y += dY;
+    Z += dZ;
+  }
+
+  X /= 10;
+  Y /= 10;
+  Z /= 10;
+
+  res = sqrt(X * X  + Z * Z);
+  Serial.println(res);
+
 
      
 
@@ -304,7 +333,7 @@ void loop(void)
                      curData = "";
                      right = false;
                      //left = false;
-                     delay(100);
+                     delay(1000);
                      moveDetector();
                     }
 
@@ -324,7 +353,7 @@ void loop(void)
               
               
     } else if (curData = "expired") {
-        //bCircuitPlayground.playTone(1500,100);
+        CircuitPlayground.playTone(1500,100);
                            //change light color to red
         for(int i = 0; i < 11; i++){
            CircuitPlayground.setPixelColor(i,255, 0, 0);

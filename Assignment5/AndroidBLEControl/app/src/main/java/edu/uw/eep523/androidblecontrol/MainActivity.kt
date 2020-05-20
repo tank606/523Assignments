@@ -25,7 +25,7 @@ import kotlin.concurrent.schedule
 
 
 const val DEVICE_NAME = "Kai_Tan"
-const val EMERGENCY_CONTACT = "1923"
+const val EMERGENCY_CONTACT = "2020"
 
 class MainActivity : AppCompatActivity(), BLEControl.Callback {
 
@@ -209,15 +209,15 @@ class MainActivity : AppCompatActivity(), BLEControl.Callback {
 // Create the AlertDialog
                         builder.create()
                     }
-                    writeLine("Received value: " + "222")
-                    if (alert == null) {
+                    //writeLine("Received value: " + "222")
+
                         alert = alertDialog
                         alert?.show()
-                    }
+
 
 
                 } else if (rx.getStringValue(0) == "dismiss") {
-                    writeLine("Received value: " + "333")
+                   // writeLine("Received value: " + "333")
                     //alertDialog?.cancel()
                     alert?.dismiss()
                     alert = null
